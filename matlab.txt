@@ -1,0 +1,130 @@
+
+%program to integrate 21 samples which are received by serial communication and to create final map of an arena.
+
+clear all
+
+x=[zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21)];
+%robot turns first right
+ x=[x ones(1,21) 2*ones(1,21) 3*ones(1,21) 4*ones(1,21) 5*ones(1,21) 6*ones(1,21) 7*ones(1,21)];
+ %robot turns second right
+ x=[x 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21)];
+ %robot turns third right
+ x=[x 6*ones(1,21) 5*ones(1,21) 4*ones(1,21) 3*ones(1,21) 2*ones(1,21) 1*ones(1,21) zeros(1,21)];
+x=20*x;
+
+y=[zeros(1,21) ones(1,21) 2*ones(1,21) 3*ones(1,21) 4*ones(1,21) 5*ones(1,21) 6*ones(1,21) 7*ones(1,21)];
+ %robot turns first right
+ y=[y 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21) 7*ones(1,21)];
+ %robot turns second right
+ y=[y 6*ones(1,21) 5*ones(1,21) 4*ones(1,21) 3*ones(1,21) 2*ones(1,21) ones(1,21) zeros(1,21)];
+ %robot turns third right
+ y=[y zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21) zeros(1,21)];
+y=y*20;
+
+t1=0:1/20:1;
+t2=pi*t1;
+%if t is in degree than
+%t2=t2*pi/180
+t3=[t2 t2 t2 t2 t2 t2 t2 t2];
+ %robot turns first right
+ t3=[t3 t2 t2 t2 t2 t2 t2 t2];
+ %robot turns second right
+ t3=[t3 t2 t2 t2 t2 t2 t2 t2];
+ %robot turns third right
+ t3=[t3 t2 t2 t2 t2 t2 t2 t2];
+
+ln_t=length(t3);
+parll=ones(1,168);
+ %robot turns first right
+ parll=[parll 2*ones(1,147)];
+ %robot turns second right
+ parll=[parll 3*ones(1,147)];
+ %robot turns third right
+ parll=[parll 4*ones(1,147)];
+
+% an array of range r for wall and obstacle
+ r=[10 10 10 10 12 14 17 22 32 80 80 80 80 67 80 80 80 80 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,0)
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 52 43 80 80 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,1) 
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 43 37 34 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,2)
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 31 31 30];	%readings of 'r' from Xbee when robot is placed at (0,3)
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,4)
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,5)
+ r=[r 10 10 11 11 12 14 17 22 32 31 30 31 32 34 38 43 52 65 80 80 80];	%readings of 'r' from Xbee when robot is placed at (0,6)
+ r=[r 10 10 11 11 12 13 13 13 12 11 10 10 11 12 13 14 20 23 27 60 80];	%readings of 'r' from Xbee when robot is placed at (0,7)
+
+
+
+ % robot turns first right
+
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 73 70 80];	
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 65 61 71 80 80 80 80 70];	
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 51 42 52 80 80 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 37 33 32 80 80];	
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 80 31 30];
+ r=[r 10 10 11 11 12 14 17 22 32 31 30 31 32 34 38 43 52 65 80 80 80];
+ r=[r 10 10 11 11 12 13 13 13 12 11 10 10 11 12 13 14 20 23 27 60 80];
+
+% robot turns second right
+ 
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 42 37 34 32 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 62 71 80 80 32 30 30];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 43 51 80 80 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 42 37 34 32 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 32 30 30];
+ r=[r 10 10 11 11 12 14 17 22 32 31 30 31 32 34 38 43 52 65 80 80 80];
+ r=[r 10 10 11 11 12 13 13 13 12 11 10 10 11 12 13 14 20 23 27 60 80];
+
+ %  robot turns third right
+
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 42 37 34 32 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 32 30 30];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 70 62 80 80 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 56 53 80 80];
+ r=[r 10 10 11 11 12 14 17 22 32 80 80 80 80 80 80 80 80 80 80 50 50];
+ r=[r 10 10 11 11 12 14 17 22 32 31 30 31 32 34 38 43 52 65 80 80 80];
+ r=[r 10 10 11 11 12 13 13 13 12 11 10 10 11 12 13 14 20 23 27 60 80];
+
+p=[];
+q=[];
+for i=1:length(r)
+    if r(i)<80
+         if parll(i)==1            % when obstacle is parallel to wall 0
+            t(i)=pi-t3(i);
+            temp_rx=r(i)*cos(t(i));
+            temp1=x(i)+temp_rx;
+            temp1=round(10*temp1)/10;
+            temp_ry=r(i)*sin(t(i));
+            temp2=y(i)+temp_ry;
+            temp2=round(10*temp2)/10;
+         elseif parll(i)==2         %when obstacle is parallel to wall 1
+             t(i)=t3(i);
+             temp_rx=r(i)*sin(t(i));
+            temp1=x(i)+temp_rx;
+            temp1=round(10*temp1)/10;
+            temp_ry=r(i)*cos(t(i));
+            temp2=y(i)+temp_ry;
+            temp2=round(10*temp2)/10;
+         elseif parll(i)==3         %when obstacle is parallel to wall 2
+             t(i)=t3(i);
+             temp_rx=r(i)*cos(t(i));
+            temp1=x(i)+temp_rx;
+            temp1=round(10*temp1)/10;
+            temp_ry=r(i)*sin(t(i));
+            temp2=y(i)-temp_ry;
+            temp2=round(10*temp2)/10;
+         else                      % when obstacle is parallel to wall 3           
+            t(i)=t3(i);
+            temp_rx=r(i)*sin(t(i));
+            temp1=x(i)-temp_rx;
+            temp1=round(10*temp1)/10;
+            temp_ry=r(i)*cos(t(i));
+            temp2=y(i)-temp_ry;
+            temp2=round(10*temp2)/10;
+         end
+        p=[p temp1];           
+        q=[q temp2];
+        figure(1)
+        plot(p,q,'*')
+        axis([-11 152 -11 152])
+    end
+end
